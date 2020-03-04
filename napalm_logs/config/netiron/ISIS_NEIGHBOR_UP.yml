@@ -12,5 +12,5 @@ messages:
     model: openconfig-isis
     mapping:
       static:
-        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}_{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: UP
+        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: UP
       variables: {}
