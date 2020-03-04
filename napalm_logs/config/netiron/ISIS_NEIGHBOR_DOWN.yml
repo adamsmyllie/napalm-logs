@@ -6,14 +6,13 @@ messages:
     tag: ISIS-4-ISIS_ADJCHG
     values:
       neighbor: (\S+)
-      interface: (\S+)
-      instance: (\S+)
+      interface: (\S+ \S+)
       level: (L\d)
       downReason: (.*)
-    line: '{level} Neighbor {neighbor} Down on {interface} {instance} due to {downReason} '
+    line: '{level} Neighbor {neighbor} Down on {interface} due to {downReason}'
     model: openconfig-isis
     mapping:
       variables:
-        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state-change-reason-message: downReason
+        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state-change-reason-message: downReason
       static:
-        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: DOWN
+        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: DOWN

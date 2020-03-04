@@ -5,12 +5,11 @@ messages:
     tag: ISIS-4-ISIS_ADJCHG
     values:
       neighbor: (\S+)
-      interface: (\S+)
-      instance: (\S+)
+      interface: (\S+ \S+)
       level: (L\d)
-    line: '{level} Neighbor {neighbor} Up on {interface} {instance} '
+    line: '{level} Neighbor {neighbor} Up on {interface}'
     model: openconfig-isis
     mapping:
       static:
-        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: UP
+        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: UP
       variables: {}
