@@ -3,16 +3,17 @@
 #Mar  4 17:15:33 HOSTNAME ISIS: L2 Neighbor 1920.0000.2001 Down on eth 2/1 due to Interface Down
 messages:
   - error: ISIS_NEIGHBOR_DOWN
-    tag: ISIS-4-ISIS_ADJCHG
+    tag: ISIS
     values:
       neighbor: (\S+)
-      interface: (\S+ \S+)
+      interface: (\S+)
+      instance: (\S+)
       level: (L\d)
       downReason: (.*)
-    line: '{level} Neighbor {neighbor} Down on {interface} due to {downReason}'
+    line: '{level} Neighbor {neighbor} Down on {interface} {instance} due to {downReason}'
     model: openconfig-isis
     mapping:
       variables:
-        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state-change-reason-message: downReason
+        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state-change-reason-message: downReason
       static:
-        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: DOWN
+        network-instances//network-instance//global//protocols//protocol//isis//interfaces//interface//{interface}{instance}//levels//level//{level}//adjacencies//adjacency//{neighbor}//state//adjacency-state: DOWN
