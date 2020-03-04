@@ -8,7 +8,7 @@ messages:
       interface: (\S+)
       instance: (\S+)
       level: (L\d)
-    line: '{level} Neighbor {neighbor} Up on {interface} {instance}'
+    line: '{level} Neighbor {neighbor} Up on {interface} {instance} '
     model: openconfig-isis
     mapping:
       static:

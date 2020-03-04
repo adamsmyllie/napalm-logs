@@ -10,7 +10,7 @@ messages:
       instance: (\S+)
       level: (L\d)
       downReason: (.*)
-    line: '{level} Neighbor {neighbor} Down on {interface} {instance} due to {downReason}'
+    line: '{level} Neighbor {neighbor} Down on {interface} {instance} due to {downReason} '
     model: openconfig-isis
     mapping:
       variables:
