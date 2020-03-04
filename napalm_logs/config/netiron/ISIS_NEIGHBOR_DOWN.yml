@@ -2,6 +2,7 @@
 #Mar  4 09:15:48 HOSTNAME ISIS: L2 Neighbor 2080.6521.2083 Down on ve 172 due to BFD Trigger
 messages:
   - error: ISIS_NEIGHBOR_DOWN
+    tag: ISIS-4-ISIS_ADJCHG
     values:
       neighbor: (\S+)
       interface: (\S+)

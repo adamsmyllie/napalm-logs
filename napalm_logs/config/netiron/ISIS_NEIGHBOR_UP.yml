@@ -2,6 +2,7 @@
 #Mar  4 09:15:48 HOSTNAME ISIS: L2 Neighbor 1932.0308.0030 Up on ve 53
 messages:
   - error: ISIS_NEIGHBOR_UP
+    tag: ISIS-4-ISIS_ADJCHG
     values:
       neighbor: (\S+)
       interface: (\S+)
