@@ -68,7 +68,8 @@ class NapalmLogs:
                  hwm=None,
                  device_worker_processes=1,
                  serializer='msgpack',
-                 buffer=None):
+                 buffer=None,
+                 opts=None):
         '''
         Init the napalm-logs engine.
 
@@ -107,7 +108,7 @@ class NapalmLogs:
         self.hwm = hwm
         self._buffer_cfg = buffer
         self._buffer = None
-        self.opts = {}
+        self.opts = opts if opts else {}
         # Setup the environment
         self._setup_log()
         self._build_config()
@@ -308,7 +309,7 @@ class NapalmLogs:
                     try:
                         log.debug('Loading %s as YAML', file_)
                         with open(filepath, 'r') as fstream:
-                            cfg = yaml.load(fstream)
+                            cfg = yaml.load(fstream, Loader=yaml.FullLoader)
                             # Reposition at the top and read the comments.
                             if file_name not in CONFIG.OS_INIT_FILENAMES:
                                 # If the file name is not a profile init.

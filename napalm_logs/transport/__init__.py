@@ -23,7 +23,11 @@ from napalm_logs.transport.kafka import KafkaTransport
 from napalm_logs.transport.http import HAS_TORNADO
 from napalm_logs.transport.http import HAS_REQUESTS
 from napalm_logs.transport.http import HTTPTransport
+# ~~~Alerta~~~
+from napalm_logs.transport.alerta import AlertaTransport
 # from napalm_logs.transport.rabbitmq import RabbitMQTransport
+# ~~~Prometheus~~~
+from napalm_logs.transport.prometheus import PrometheusTransport
 
 log = logging.getLogger(__file__)
 
@@ -34,6 +38,7 @@ TRANSPORT_LOOKUP = {
     'print': CLITransport,
     'console': CLITransport,
     'log': LogTransport,
+    'prometheus': PrometheusTransport,
     # 'rmq': RabbitMQransport,
     # 'rabbitmq': RabbitMQransport,
     '*': ZMQTransport
@@ -45,6 +50,9 @@ if HAS_KAFKA:
 
 if HAS_REQUESTS or HAS_TORNADO:
     TRANSPORT_LOOKUP['http'] = HTTPTransport
+
+if HAS_REQUESTS or HAS_TORNADO:
+    TRANSPORT_LOOKUP['alerta'] = AlertaTransport
 
 
 def get_transport(name):

@@ -273,10 +273,11 @@ class NapalmLogsServerProc(NapalmLogsProc):
                 else:
                     log.error(error, exc_info=True)
                     raise NapalmLogsExit(error)
-            if six.PY3:
-                msg = str(msg, 'utf-8')
-            else:
-                msg = msg.encode('utf-8')
+            if isinstance(msg, bytes):
+                if six.PY3:
+                    msg = str(msg, 'utf-8')
+                else:
+                    msg = msg.encode('utf-8')
             log.debug('[%s] Dequeued message from %s: %s', address, msg, time.time())
             napalm_logs_server_messages_received.inc()
             os_list = self._identify_os(msg)
@@ -289,28 +290,27 @@ class NapalmLogsServerProc(NapalmLogsProc):
                     log.debug('Queueing message to %s', dev_os)
                     if six.PY3:
                         dev_os = bytes(dev_os, 'utf-8')
+                    napalm_logs_server_messages_with_identified_os.labels(device_os=dev_os.decode()).inc()
                     if self._buffer:
-                        message = '{dev_os}/{host}/{msg}'.format(dev_os=dev_os,
+                        message = '{dev_os}/{host}/{msg}'.format(dev_os=dev_os.decode(),
                                                                  host=msg_dict['host'],
                                                                  msg=msg_dict['message'])
-                        message_key = base64.b64encode(message)
+                        message_key = base64.b64encode(bytes(message, 'utf-8')).decode()
                         if self._buffer[message_key]:
                             log.info('"%s" seems to be already buffered, skipping', msg_dict['message'])
-                            napalm_logs_server_skipped_buffered_messages.labels(device_os=dev_os).inc()
+                            napalm_logs_server_skipped_buffered_messages.labels(device_os=dev_os.decode()).inc()
                             continue
                         log.debug('"%s" is not buffered yet, added', msg_dict['message'])
                         self._buffer[message_key] = 1
                     self.pub.send_multipart([dev_os,
                                              umsgpack.packb((msg_dict, address))])
-                    # self.os_pipes[dev_os].send((msg_dict, address))
-                    napalm_logs_server_messages_with_identified_os.labels(device_os=dev_os).inc()
-                    napalm_logs_server_messages_device_queued.labels(device_os=dev_os).inc()
+                    napalm_logs_server_messages_device_queued.labels(device_os=dev_os.decode()).inc()
 
                 elif dev_os and dev_os not in self.started_os_proc:
                     # Identified the OS, but the corresponding process does not seem to be started.
                     log.info('Unable to queue the message to %s. Is the sub-process started?', dev_os)
-                    napalm_logs_server_messages_with_identified_os.labels(device_os=dev_os).inc()
-                    napalm_logs_server_messages_failed_device_queuing.labels(device_os=dev_os).inc()
+                    napalm_logs_server_messages_with_identified_os.labels(device_os=dev_os.decode()).inc()
+                    napalm_logs_server_messages_failed_device_queuing.labels(device_os=dev_os.decode()).inc()
 
                 elif not dev_os and self.opts['_server_send_unknown']:
                     # OS not identified, but the user requested to publish the message as-is

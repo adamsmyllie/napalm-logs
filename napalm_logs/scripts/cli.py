@@ -231,25 +231,25 @@ class NLOptionParser(OptionParser, object):
             if isinstance(v, list):
                 self.convert_env_list(v)
 
-    def convert_env_list(self, l):
-        for n, v in enumerate(l):
-            if isinstance(v, six.string_type):
-                if not v.startswith('${') or not v.endswith('}'):
+    def convert_env_list(self, lst):
+        for name, value in enumerate(lst):
+            if isinstance(value, six.string_type):
+                if not value.startswith('${') or not value.endswith('}'):
                     continue
-                if not os.environ.get(v[2:-1]):
-                    log.error('No env variable found for %s, please check your config file', v[2:-1])
+                if not os.environ.get(value[2:-1]):
+                    log.error('No env variable found for %s, please check your config file', value[2:-1])
                     sys.exit(1)
-                l[n] = os.environ[v[2:-1]]
-            if isinstance(v, dict):
-                self.convert_env_dict(v)
-            if isinstance(v, list):
-                self.convert_env_list(v)
+                lst[name] = os.environ[value[2:-1]]
+            if isinstance(value, dict):
+                self.convert_env_dict(value)
+            if isinstance(value, list):
+                self.convert_env_list(value)
 
     def read_config_file(self, filepath):
         config = {}
         try:
             with open(filepath, 'r') as fstream:
-                config = yaml.load(fstream)
+                config = yaml.load(fstream, Loader=yaml.FullLoader)
         except (IOError, yaml.YAMLError):
             log.info('Unable to read from %s', filepath)
         # Convert any env variables
@@ -372,8 +372,12 @@ class NLOptionParser(OptionParser, object):
                                        file_cfg.get('device_worker_processes') or 1,
             'serializer': self.options.serializer or file_cfg.get('serializer') or
                           defaults.SERIALIZER,
-            'buffer': buffer_cfg
+            'buffer': buffer_cfg,
+            'opts': {}
         }
+        for opt, val in file_cfg.items():
+            if opt not in cfg:
+                cfg['opts'][opt] = val
         return cfg
 
 
