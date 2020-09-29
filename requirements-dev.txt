@@ -5,5 +5,6 @@ jinja2
 coveralls
 pytest-cov
 pytest-json
+pytest-catchlog
 pytest-pythonpath
 flake8-import-order

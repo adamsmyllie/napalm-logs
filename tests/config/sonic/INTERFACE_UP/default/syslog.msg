@@ -1,1 +1,0 @@
-<13>1 2019-02-21T16:46:14.931186+00:00 ss12.00.lab orchagent - - -  :- setHostIntfsOperStatus: Set operation status UP to host interface Ethernet28

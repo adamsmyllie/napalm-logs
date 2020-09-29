@@ -8,6 +8,9 @@ from setuptools import setup, find_packages
 
 __author__ = 'Mircea Ulinic <mircea.ulinic@gmail.com>'
 
+with open('VERSION', 'r') as fp_:
+    version = fp_.read()
+
 with codecs.open('README.rst', 'r', encoding='utf8') as file:
     long_description = file.read()
 
@@ -16,7 +19,7 @@ with open("requirements.txt", "r") as fs:
 
 setup(
     name='napalm-logs',
-    version='0.9.0',
+    version=version,
     packages=find_packages(),
     author='Mircea Ulinic',
     author_email='mircea.ulinic@gmail.com',
@@ -30,9 +33,10 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Operating System :: POSIX :: Linux',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
         'Intended Audience :: Developers'
