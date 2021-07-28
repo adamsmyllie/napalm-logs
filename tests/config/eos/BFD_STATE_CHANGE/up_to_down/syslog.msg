@@ -1,1 +1,1 @@
-<165>Feb  7 22:22:26 HOSTNAME Bfd: %BFD-5-STATE_CHANGE: peer (vrf:default, ip:18.11.5.1, intf:Ethernet50/1, srcIp:0.0.0.0, type:normal) changed state from Up to Down diag None
+<165>Jul 27 18:35:07 HOSTNAME Bfd: %BFD-5-STATE_CHANGE: peer (vrf:default, ip:185.116.58.47, intf:Ethernet5, type:normal) changed state from Up to Down diag NeighDown

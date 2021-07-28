@@ -1,1 +1,1 @@
-<30>Dec 14 12:08:12 HOSTNAME Isis: %ISIS-4-ISIS_ADJCHG: L1 Neighbor State Change for SystemID 1920.0000.2006 on et7 to UP
+<164>Jul 27 18:35:13 HOSTNAME Isis: Instance 0: %ISIS-4-ISIS_ADJCHG: L2 Neighbor State Change for SystemID 2080.6521.2080 on et5 to UP

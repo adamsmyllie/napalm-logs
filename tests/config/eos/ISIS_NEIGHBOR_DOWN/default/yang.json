@@ -40,12 +40,12 @@
         "severity": 5,
         "facility": 3,
         "pri": "29",
-        "processName": "Isis",
+        "processName": "Isis: Instance 0",
         "host": "HOSTNAME",
         "tag": "ISIS-4-ISIS_ADJCHG",
         "time": "12:07:43",
         "date": "Dec 14",
-        "message": ": L1 Neighbor State Change for SystemID 1920.0000.2006 on et7 to DOWN: interface went down or no IP address on interface"
+        "message": ": L2 Neighbor State Change for SystemID 1851.1605.6021 on et7 to DOWN: interface went down or no IP address on interface"
       },
       "facility": 3,
       "ip": "127.0.0.1",
