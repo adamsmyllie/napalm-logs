@@ -84,7 +84,6 @@ celerybeat-schedule
 .env
 
 # virtualenv
-.venv/
 venv/
 ENV/
 
@@ -95,5 +94,3 @@ ENV/
 .ropeproject
 report.json
 
-# PyCharm stuff
-.idea

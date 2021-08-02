@@ -1,20 +1,22 @@
 NAME := napalm_logs
+# This is the version of napalm-logs that will be installed
+VERSION ?= $(shell cat ../VERSION)
 # This can be changed to build with different BUILD_REQS
-VERSION ?= $(shell git describe --tags $(git rev-list --tags --max-count=1))
+INTERATION := 0
 
 ## To specify which dependencies to install please set BUILD_REQS
 ## For example:
 ## make BUILD_REQS="kafka tornado" build
 
-IMAGE = $(NAME):$(VERSION)
+IMAGE = $(NAME):$(VERSION)-${INTERATION}
 REPO ?= mirceaulinic/napalm-logs
 
 DOCKERFILE ?= Dockerfile
-DOCKER_BUILD_CONTEXT ?= $(dir $(abspath $(PWD)../))
+DOCKER_BUILD_CONTEXT ?= .
 
 .PHONY: build
 build: clean
-	docker build -f ../$(DOCKERFILE) -t $(IMAGE) $(DOCKER_BUILD_CONTEXT) --build-arg requirements="${BUILD_REQS}"
+	docker build -f $(DOCKERFILE) -t $(IMAGE) $(DOCKER_BUILD_CONTEXT) --build-arg requirements="${BUILD_REQS}" --build-arg version="${VERSION}"
 
 .PHONY: publish
 publish: build

@@ -1,6 +1,5 @@
 pyzmq
 pyyaml
 pynacl
-dateparser
 u-msgpack-python
 prometheus_client

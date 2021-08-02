@@ -68,13 +68,11 @@ Available publishers and their options
 .. toctree::
    :maxdepth: 1
 
-   alerta
    cli
    http
    kafka
    log
    zmq
-   prometheus
 
 Globally available options
 --------------------------
@@ -158,7 +156,7 @@ Configuration example:
 .. _publisher-opts-no-encrypt:
 
 ``no_encrypt``: ``False``
--------------------------
+------------------------
 
 .. versionadded:: 0.4.2
 

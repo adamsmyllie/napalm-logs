@@ -1,1 +1,0 @@
-<30>ztp-tankstelle_1-ts port02 2018-Nov- 9 15:38:25.341 RXDATA: tankstelle_1-port2-dev#

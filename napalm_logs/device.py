@@ -9,15 +9,12 @@ import os
 import re
 import signal
 import logging
-import datetime
-import dateutil
 import threading
-from time import mktime
+from datetime import datetime, timedelta
 
 # Import thrid party libs
 import zmq
 import umsgpack
-import dateparser
 from prometheus_client import Counter
 
 # Import napalm-logs pkgs
@@ -210,13 +207,36 @@ class NapalmLogsDeviceProc(NapalmLogsProc):
         self.pub.send(bin_obj)
 
     def _format_time(self, time, date, timezone, prefix_id):
-        date_time = None
-        if time and date:
-            date_time = dateparser.parse('{} {}'.format(date, time))
-        if not date_time:
-            tz = dateutil.tz.gettz(timezone)
-            date_time = datetime.datetime.now(tz)
-        return int(mktime(date_time.utctimetuple()))
+        # TODO can we work out the time format from the regex? Probably but this is a task for another day
+        time_format = self._config['prefixes'][prefix_id].get('time_format', '')
+        if not time or not date or not time_format:
+            return int(datetime.now().strftime('%s'))
+        # Most syslog do not include the year, so we will add the current year if we are not supplied with one
+        if '%y' in time_format or '%Y' in time_format:
+            parsed_time = datetime.strptime('{} {}'.format(date, time), time_format)
+        else:
+            year = datetime.now().year
+            try:
+                parsed_time = datetime.strptime('{} {} {}'.format(year, date, time), '%Y {}'.format(time_format))
+                # If the timestamp is in the future then it is likely that the year
+                # is wrong. We subtract 1 day from the parsed time to eleminate any
+                # difference between clocks.
+                if parsed_time - timedelta(days=1) > datetime.now():
+                    parsed_time = datetime.strptime(
+                        '{} {} {}'.format(year - 1, date, time),
+                        '%Y {}'.format(time_format)
+                    )
+            except ValueError:
+                # It is rare but by appending the year from the server, we could produce
+                # an invalid date such as February 29, 2018 (2018 is not a leap year). This
+                # is caused by the device emitting the syslog having an incorrect local date set.
+                # In such cases, we fall back to the full date from the server and log this action.
+                parsed_time = datetime.now().strftime(time_format)
+                log.info(
+                    "Invalid date produced while formatting syslog date. Falling back to server date [%s]",
+                    self._name
+                )
+        return int((parsed_time - datetime(1970, 1, 1)).total_seconds())
 
     def start(self):
         '''
@@ -243,12 +263,7 @@ class NapalmLogsDeviceProc(NapalmLogsProc):
             "Counter of failed OpenConfig object generations",
             ['device_os']
         )
-        if self.opts.get('metrics_include_attributes', True):
-            napalm_logs_device_published_messages_attrs = Counter(
-                'napalm_logs_device_published_messages_attrs',
-                "Counter of published messages, with more granular selection",
-                ['device_os', 'host', 'error']
-            )
+
         self._setup_ipc()
         # Start suicide polling thread
         thread = threading.Thread(target=self._suicide_when_without_parent, args=(os.getppid(),))
@@ -334,12 +349,6 @@ class NapalmLogsDeviceProc(NapalmLogsProc):
             self.pub.send(umsgpack.packb(to_publish))
             # self._publish(to_publish)
             napalm_logs_device_published_messages.labels(device_os=self._name).inc()
-            if self.opts.get('metrics_include_attributes', True):
-                napalm_logs_device_published_messages_attrs.labels(
-                    device_os=self._name,
-                    error=to_publish['error'],
-                    host=to_publish['host']
-                ).inc()
 
     def stop(self):
         '''

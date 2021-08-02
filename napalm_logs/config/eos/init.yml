@@ -4,6 +4,7 @@
 # Matching white space in `values`
 #
 prefixes:
+  # First set of prefixes without Instance
   - time_format: "%b %d %H:%M:%S"
     values:
       date: (\w+ +\d+)
@@ -20,6 +21,7 @@ prefixes:
       processName: (\w+)
       tag: ([\w-]+)
     line: '{date}T{time} {host} {processName}: %{tag}'
+  # Second set of prefixes including Instance
   - time_format: "%b %d %H:%M:%S"
     values:
       date: (\w+ +\d+)
